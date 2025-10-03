@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+    <title>Heart Catcher - Nossos Jogos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffb3c6, #ffc0cb);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 20, 147, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 182, 193, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff1493 !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 20px !important;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 105, 135, 0.3);
+            transition: all 0.3s ease;
+            z-index: 30;
+            color: white !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            min-width: 50px !important;
+            min-height: 50px !important;
+            max-width: 50px !important;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            background: #ff69b4 !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(255, 105, 135, 0.4);
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 105, 135, 0.25);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 20px auto;
+            min-height: auto;
+        }
+
+        .game-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: #ff1493;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(255, 20, 147, 0.2);
+        }
+
+        .game-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 105, 180, 0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 105, 180, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff1493;
+        }
+
+        .game-area {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(255, 105, 180, 0.3);
+            margin: 20px 0;
+        }
+
+        .player {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+            transition: all 0.1s ease;
+            z-index: 20;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff1493;
+            animation: fall linear;
+            z-index: 10;
+            filter: drop-shadow(0 0 8px rgba(255, 20, 147, 0.6));
+        }
+
+        .heart.golden {
+            color: #FFD700;
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+        }
+
+        .heart.special {
+            color: #FF69B4;
+            font-size: 1.8rem;
+            animation: fallSpecial linear;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(450px) rotate(360deg);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fallSpecial {
+            from {
+                transform: translateY(-50px) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(200px) rotate(180deg) scale(1.2);
+            }
+            to {
+                transform: translateY(450px) rotate(360deg) scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .instructions {
+            background: rgba(255, 105, 180, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff1493;
+        }
+
+        .instructions h3 {
+            color: #ff1493;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .instructions p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            color: #666;
+            text-align: left;
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            display: none;
+        }
+
+        .game-over h2 {
+            color: #ff1493;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .game-over p {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff69b4;
+            margin: 20px 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff1493;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleExplosion 0.6s ease-out forwards;
+        }
+
+        @keyframes particleExplosion {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translateY(-50px);
+            }
+        }
+
+        .power-up {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: fall linear;
+            z-index: 10;
+        }
+
+        .power-up.magnet {
+            color: #00BFFF;
+        }
+
+        .power-up.slow {
+            color: #9370DB;
+        }
+
+        .power-up.multiplier {
+            color: #FFD700;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px 0;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .game-container {
+                padding: 20px;
+                margin: 10px auto;
+                width: 95%;
+                min-height: auto;
+            }
+            
+            .game-area {
+                height: 300px;
+            }
+            
+            .player {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .heart {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .control-row {
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goToGames()">←</button>
+    
+    <div class="game-container">
+        <h1 class="game-title">💖 Heart Catcher 💖</h1>
+        <p class="game-subtitle">Pegue o máximo de corações que conseguir! Evite deixá-los cair!</p>
+        
+        <div class="instructions">
+            <h3>📋 Como Jogar</h3>
+            <p>Use as setas do teclado (ou WASD) ou os botões para mover o jogador em todas as direções e pegar os corações que caem do céu!</p>
+            <ul>
+                <li>💖 Coração normal: +10 pontos</li>
+                <li>💛 Coração dourado: +50 pontos</li>
+                <li>💕 Coração especial: +25 pontos</li>
+                <li>❌ Perder 3 corações = Game Over</li>
+            </ul>
+        </div>
+        
+        <div class="game-stats">
+            <div class="stat">
+                <div class="stat-label">Pontos</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Vidas</div>
+                <div class="stat-value" id="lives">3</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Nível</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+        </div>
+        
+        <div class="game-area" id="gameArea">
+            <div class="player" id="player">💕</div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-row">
+                <button class="control-btn" id="leftBtn" onmousedown="startMove('left')" onmouseup="stopMove()" ontouchstart="startMove('left')" ontouchend="stopMove()">←</button>
+                <button class="control-btn" id="startBtn" onclick="startGame()">🎮 Iniciar</button>
+                <button class="control-btn" id="rightBtn" onmousedown="startMove('right')" onmouseup="stopMove()" ontouchstart="startMove('right')" ontouchend="stopMove()">→</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" id="upBtn" onmousedown="startMove('up')" onmouseup="stopMove()" ontouchstart="startMove('up')" ontouchend="stopMove()">↑</button>
+                <button class="control-btn" id="downBtn" onmousedown="startMove('down')" onmouseup="stopMove()" ontouchstart="startMove('down')" ontouchend="stopMove()">↓</button>
+            </div>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <h2>🎉 Game Over!</h2>
+            <p>Você coletou:</p>
+            <div class="final-score" id="finalScore">0</div>
+            <p>pontos!</p>
+            <button class="control-btn" onclick="restartGame()">🔄 Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        class HeartCatcherGame {
+            constructor() {
+                this.gameArea = document.getElementById('gameArea');
+                this.player = document.getElementById('player');
+                this.scoreElement = document.getElementById('score');
+                this.livesElement = document.getElementById('lives');
+                this.levelElement = document.getElementById('level');
+                this.gameOverElement = document.getElementById('gameOver');
+                
+                this.gameState = 'waiting'; // waiting, playing, paused, gameOver
+                this.score = 0;
+                this.lives = 3;
+                this.level = 1;
+                this.playerX = 50; // porcentagem
+                this.playerY = 80; // porcentagem (80% do topo = 20% do bottom)
+                this.playerSpeed = 2;
+                this.heartSpawnRate = 2000; // ms
+                this.hearts = [];
+                this.powerUps = [];
+                this.gameLoop = null;
+                this.heartSpawner = null;
+                this.powerUpSpawner = null;
+                this.moveDirection = null;
+                
+                this.setupEventListeners();
+                this.updateDisplay();
+            }
+            
+            setupEventListeners() {
+                // Controles de teclado
+                document.addEventListener('keydown', (e) => {
+                    if (this.gameState !== 'playing') return;
+                    
+                    switch(e.key) {
+                        case 'ArrowLeft':
+                        case 'a':
+                        case 'A':
+                            e.preventDefault();
+                            this.moveDirection = 'left';
+                            break;
+                        case 'ArrowRight':
+                        case 'd':
+                        case 'D':
+                            e.preventDefault();
+                            this.moveDirection = 'right';
+                            break;
+                        case 'ArrowUp':
+                        case 'w':
+                        case 'W':
+                            e.preventDefault();
+                            this.moveDirection = 'up';
+                            break;
+                        case 'ArrowDown':
+                        case 's':
+                        case 'S':
+                            e.preventDefault();
+                            this.moveDirection = 'down';
+                            break;
+                        case ' ':
+                            e.preventDefault();
+                            this.pauseGame();
+                            break;
+                    }
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A' || 
+                        e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D' ||
+                        e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' ||
+                        e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+                        this.moveDirection = null;
+                    }
+                });
+                
+                // Controles touch para mobile
+                this.gameArea.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (this.gameState !== 'playing') return;
+                    
+                    const touch = e.touches[0];
+                    const rect = this.gameArea.getBoundingClientRect();
+                    const touchX = (touch.clientX - rect.left) / rect.width * 100;
+                    
+                    if (touchX < 50) {
+                        this.moveDirection = 'left';
+                    } else {
+                        this.moveDirection = 'right';
+                    }
+                });
+                
+                this.gameArea.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.moveDirection = null;
+                });
+            }
+            
+            startGame() {
+                this.gameState = 'playing';
+                this.score = 0;
+                this.lives = 3;
+                this.level = 1;
+                this.playerX = 50;
+                this.playerY = 80;
+                this.hearts = [];
+                this.powerUps = [];
+                this.heartSpawnRate = 2000;
+                
+                this.updateDisplay();
+                this.updatePlayerPosition();
+                this.gameOverElement.style.display = 'none';
+                
+                // Iniciar loops do jogo
+                this.gameLoop = setInterval(() => this.update(), 16); // ~60 FPS
+                this.heartSpawner = setInterval(() => this.spawnHeart(), this.heartSpawnRate);
+                this.powerUpSpawner = setInterval(() => this.spawnPowerUp(), 10000); // Power-ups a cada 10s
+                
+                document.getElementById('startBtn').textContent = '⏸️ Pausar';
+                document.getElementById('startBtn').onclick = () => this.pauseGame();
+            }
+            
+            pauseGame() {
+                if (this.gameState === 'playing') {
+                    this.gameState = 'paused';
+                    clearInterval(this.gameLoop);
+                    clearInterval(this.heartSpawner);
+                    clearInterval(this.powerUpSpawner);
+                    document.getElementById('startBtn').textContent = '▶️ Continuar';
+                    document.getElementById('startBtn').onclick = () => this.resumeGame();
+                } else if (this.gameState === 'paused') {
+                    this.resumeGame();
+                }
+            }
+            
+            resumeGame() {
+                this.gameState = 'playing';
+                this.gameLoop = setInterval(() => this.update(), 16);
+                this.heartSpawner = setInterval(() => this.spawnHeart(), this.heartSpawnRate);
+                this.powerUpSpawner = setInterval(() => this.spawnPowerUp(), 10000);
+                document.getElementById('startBtn').textContent = '⏸️ Pausar';
+                document.getElementById('startBtn').onclick = () => this.pauseGame();
+            }
+            
+            update() {
+                if (this.gameState !== 'playing') return;
+                
+                this.movePlayer();
+                this.updateHearts();
+                this.updatePowerUps();
+                this.checkCollisions();
+                this.updateLevel();
+            }
+            
+            movePlayer() {
+                if (this.moveDirection === 'left' && this.playerX > 5) {
+                    this.playerX -= this.playerSpeed;
+                } else if (this.moveDirection === 'right' && this.playerX < 95) {
+                    this.playerX += this.playerSpeed;
+                } else if (this.moveDirection === 'up' && this.playerY > 10) {
+                    this.playerY -= this.playerSpeed;
+                } else if (this.moveDirection === 'down' && this.playerY < 90) {
+                    this.playerY += this.playerSpeed;
+                }
+                this.updatePlayerPosition();
+            }
+            
+            updatePlayerPosition() {
+                this.player.style.left = this.playerX + '%';
+                this.player.style.top = this.playerY + '%';
+            }
+            
+            spawnHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                
+                // Tipos de coração com probabilidades diferentes
+                const rand = Math.random();
+                if (rand < 0.05) { // 5% chance
+                    heart.className += ' golden';
+                    heart.innerHTML = '💛';
+                    heart.points = 50;
+                } else if (rand < 0.15) { // 10% chance
+                    heart.className += ' special';
+                    heart.innerHTML = '💕';
+                    heart.points = 25;
+                } else { // 85% chance
+                    heart.innerHTML = '💖';
+                    heart.points = 10;
+                }
+                
+                heart.style.left = Math.random() * 90 + 5 + '%';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                
+                this.gameArea.appendChild(heart);
+                this.hearts.push(heart);
+                
+                // Remover coração após a animação
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.remove();
+                        const index = this.hearts.indexOf(heart);
+                        if (index > -1) {
+                            this.hearts.splice(index, 1);
+                            this.loseLife();
+                        }
+                    }
+                }, 5000);
+            }
+            
+            spawnPowerUp() {
+                const powerUp = document.createElement('div');
+                powerUp.className = 'power-up';
+                
+                const types = ['magnet', 'slow', 'multiplier'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                powerUp.className += ' ' + type;
+                
+                switch(type) {
+                    case 'magnet':
+                        powerUp.innerHTML = '🧲';
+                        powerUp.effect = 'magnet';
+                        break;
+                    case 'slow':
+                        powerUp.innerHTML = '⏰';
+                        powerUp.effect = 'slow';
+                        break;
+                    case 'multiplier':
+                        powerUp.innerHTML = '✨';
+                        powerUp.effect = 'multiplier';
+                        break;
+                }
+                
+                powerUp.style.left = Math.random() * 90 + 5 + '%';
+                powerUp.style.animationDuration = '4s';
+                
+                this.gameArea.appendChild(powerUp);
+                this.powerUps.push(powerUp);
+                
+                setTimeout(() => {
+                    if (powerUp.parentNode) {
+                        powerUp.remove();
+                        const index = this.powerUps.indexOf(powerUp);
+                        if (index > -1) {
+                            this.powerUps.splice(index, 1);
+                        }
+                    }
+                }, 4000);
+            }
+            
+            updateHearts() {
+                this.hearts.forEach(heart => {
+                    const rect = heart.getBoundingClientRect();
+                    const gameRect = this.gameArea.getBoundingClientRect();
+                    heart.currentY = rect.top - gameRect.top;
+                });
+            }
+            
+            updatePowerUps() {
+                this.powerUps.forEach(powerUp => {
+                    const rect = powerUp.getBoundingClientRect();
+                    const gameRect = this.gameArea.getBoundingClientRect();
+                    powerUp.currentY = rect.top - gameRect.top;
+                });
+            }
+            
+            checkCollisions() {
+                const playerRect = this.player.getBoundingClientRect();
+                const gameRect = this.gameArea.getBoundingClientRect();
+                const playerY = playerRect.top - gameRect.top;
+                const playerX = playerRect.left - gameRect.left;
+                const playerWidth = playerRect.width;
+                const playerHeight = playerRect.height;
+                
+                // Verificar colisões com corações
+                this.hearts.forEach((heart, index) => {
+                    const heartRect = heart.getBoundingClientRect();
+                    const heartY = heartRect.top - gameRect.top;
+                    const heartX = heartRect.left - gameRect.left;
+                    const heartWidth = heartRect.width;
+                    const heartHeight = heartRect.height;
+                    
+                    if (heartY + heartHeight > playerY && 
+                        heartY < playerY + playerHeight &&
+                        heartX + heartWidth > playerX && 
+                        heartX < playerX + playerWidth) {
+                        
+                        this.collectHeart(heart, index);
+                    }
+                });
+                
+                // Verificar colisões com power-ups
+                this.powerUps.forEach((powerUp, index) => {
+                    const powerUpRect = powerUp.getBoundingClientRect();
+                    const powerUpY = powerUpRect.top - gameRect.top;
+                    const powerUpX = powerUpRect.left - gameRect.left;
+                    const powerUpWidth = powerUpRect.width;
+                    const powerUpHeight = powerUpRect.height;
+                    
+                    if (powerUpY + powerUpHeight > playerY && 
+                        powerUpY < playerY + playerHeight &&
+                        powerUpX + powerUpWidth > playerX && 
+                        powerUpX < playerX + playerWidth) {
+                        
+                        this.collectPowerUp(powerUp, index);
+                    }
+                });
+            }
+            
+            collectHeart(heart, index) {
+                this.score += heart.points;
+                this.createParticles(heart);
+                heart.remove();
+                this.hearts.splice(index, 1);
+                this.updateDisplay();
+                this.playCollectSound();
+            }
+            
+            collectPowerUp(powerUp, index) {
+                this.activatePowerUp(powerUp.effect);
+                this.createParticles(powerUp);
+                powerUp.remove();
+                this.powerUps.splice(index, 1);
+                this.playCollectSound();
+            }
+            
+            activatePowerUp(effect) {
+                switch(effect) {
+                    case 'magnet':
+                        // Atrair corações próximos
+                        this.hearts.forEach(heart => {
+                            const heartRect = heart.getBoundingClientRect();
+                            const gameRect = this.gameArea.getBoundingClientRect();
+                            const heartX = (heartRect.left - gameRect.left) / gameRect.width * 100;
+                            
+                            if (Math.abs(heartX - this.playerX) < 30) {
+                                heart.style.left = this.playerX + '%';
+                            }
+                        });
+                        break;
+                    case 'slow':
+                        // Diminuir velocidade dos corações
+                        this.hearts.forEach(heart => {
+                            const currentDuration = parseFloat(heart.style.animationDuration);
+                            heart.style.animationDuration = (currentDuration * 2) + 's';
+                        });
+                        break;
+                    case 'multiplier':
+                        // Pontos em dobro por 10 segundos
+                        this.scoreMultiplier = 2;
+                        setTimeout(() => {
+                            this.scoreMultiplier = 1;
+                        }, 10000);
+                        break;
+                }
+            }
+            
+            createParticles(element) {
+                const rect = element.getBoundingClientRect();
+                const gameRect = this.gameArea.getBoundingClientRect();
+                const x = rect.left - gameRect.left + rect.width / 2;
+                const y = rect.top - gameRect.top + rect.height / 2;
+                
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.background = element.classList.contains('golden') ? '#FFD700' : '#ff1493';
+                    
+                    this.gameArea.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 600);
+                }
+            }
+            
+            loseLife() {
+                this.lives--;
+                this.updateDisplay();
+                
+                if (this.lives <= 0) {
+                    this.gameOver();
+                }
+            }
+            
+            updateLevel() {
+                const newLevel = Math.floor(this.score / 500) + 1;
+                if (newLevel > this.level) {
+                    this.level = newLevel;
+                    this.heartSpawnRate = Math.max(500, this.heartSpawnRate - 200);
+                    this.updateDisplay();
+                    
+                    // Ajustar spawn rate
+                    clearInterval(this.heartSpawner);
+                    this.heartSpawner = setInterval(() => this.spawnHeart(), this.heartSpawnRate);
+                }
+            }
+            
+            updateDisplay() {
+                this.scoreElement.textContent = this.score;
+                this.livesElement.textContent = this.lives;
+                this.levelElement.textContent = this.level;
+            }
+            
+            gameOver() {
+                this.gameState = 'gameOver';
+                clearInterval(this.gameLoop);
+                clearInterval(this.heartSpawner);
+                clearInterval(this.powerUpSpawner);
+                
+                // Remover todos os corações e power-ups
+                this.hearts.forEach(heart => heart.remove());
+                this.powerUps.forEach(powerUp => powerUp.remove());
+                this.hearts = [];
+                this.powerUps = [];
+                
+                document.getElementById('finalScore').textContent = this.score;
+                this.gameOverElement.style.display = 'block';
+                
+                document.getElementById('startBtn').textContent = '🎮 Iniciar';
+                document.getElementById('startBtn').onclick = () => this.startGame();
+            }
+            
+            restartGame() {
+                this.gameOverElement.style.display = 'none';
+                this.startGame();
+            }
+            
+            playCollectSound() {
+                // Criar som de coleta
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            }
+        }
+
+        // Funções globais para os botões
+        let game;
+        let moveInterval = null;
+
+        function startMove(direction) {
+            if (game && game.gameState === 'playing') {
+                game.moveDirection = direction;
+            }
+        }
+
+        function stopMove() {
+            if (game) {
+                game.moveDirection = null;
+            }
+        }
+
+        function startGame() {
+            if (!game) {
+                game = new HeartCatcherGame();
+            }
+            game.startGame();
+        }
+
+        function restartGame() {
+            if (game) {
+                game.restartGame();
+            }
+        }
+
+        function goToGames() {
+            window.location.href = 'games.html';
+        }
+
+        // Inicializar o jogo quando a página carregar
+        window.addEventListener('load', () => {
+            game = new HeartCatcherGame();
+        });
+    </script>
+</body>
+</html>
