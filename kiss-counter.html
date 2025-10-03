@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Beijos - Nossos Jogos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffb3c6, #ffc0cb);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 20, 147, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 182, 193, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+        }
+
+        .heart.large {
+            font-size: 40px;
+            animation: floatLarge 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255, 20, 147, 0.8));
+        }
+
+        .heart.medium {
+            font-size: 30px;
+            animation: floatMedium 7s ease-in-out infinite;
+            filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.7));
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatLarge {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.2);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatMedium {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            25% {
+                transform: translateY(75vh) rotate(90deg) translateX(20px);
+            }
+            75% {
+                transform: translateY(25vh) rotate(270deg) translateX(-20px);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg) translateX(0px);
+                opacity: 0;
+            }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff1493 !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 20px !important;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 105, 135, 0.3);
+            transition: all 0.3s ease;
+            z-index: 30;
+            color: white !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            min-width: 50px !important;
+            min-height: 50px !important;
+            max-width: 50px !important;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            background: #ff69b4 !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(255, 105, 135, 0.4);
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 105, 135, 0.25);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .game-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: #ff1493;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(255, 20, 147, 0.2);
+        }
+
+        .game-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ff1493;
+            margin: 20px 0;
+            text-shadow: 0 2px 10px rgba(255, 20, 147, 0.3);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .counter-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ff69b4;
+            margin: 20px 0;
+            text-shadow: 0 2px 10px rgba(255, 105, 180, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .counter-display.updated {
+            transform: scale(1.2);
+            color: #ff1493;
+        }
+
+        .kiss-button {
+            background: linear-gradient(135deg, #ff1493, #ff69b4, #ffb6c1);
+            background-size: 200% 200%;
+            border: none;
+            padding: 30px 60px;
+            font-size: 2rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 15px 40px rgba(255, 20, 147, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+            animation: gradientShift 3s ease infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kiss-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .kiss-button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .kiss-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.5);
+        }
+
+        .kiss-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            font-size: 1.5rem;
+            padding: 20px 40px;
+            margin: 20px 0;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+            transform: translateY(-2px);
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            margin: 20px 0;
+        }
+
+        .restart-button:hover {
+            background: linear-gradient(135deg, #f57c00, #ff9800);
+            transform: translateY(-2px);
+        }
+
+        .game-status {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .game-status.waiting {
+            background: rgba(255, 193, 7, 0.2);
+            color: #f57c00;
+            border: 2px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .game-status.playing {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .game-status.finished {
+            background: rgba(255, 20, 147, 0.2);
+            color: #ff1493;
+            border: 2px solid rgba(255, 20, 147, 0.3);
+        }
+
+        .instructions {
+            background: rgba(255, 105, 180, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff1493;
+        }
+
+        .instructions h3 {
+            color: #ff1493;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .instructions p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .kiss-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .kiss-effect {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff1493;
+            animation: kissAnimation 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes kissAnimation {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-50px) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .score-message {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .kiss-button {
+                font-size: 1.5rem;
+                padding: 25px 40px;
+            }
+            
+            .counter-display {
+                font-size: 3rem;
+            }
+            
+            .timer-display {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    <div class="kiss-effects" id="kissEffects"></div>
+    
+    <button class="back-btn" onclick="goToGames()">←</button>
+    
+    <div class="game-container">
+        <h1 class="game-title">💋 Contador de Beijos 💋</h1>
+        <p class="game-subtitle">Quantos beijos você consegue dar em 30 segundos?</p>
+        
+        <div class="instructions">
+            <h3>📋 Como Jogar</h3>
+            <p>Clique no botão de beijo o máximo de vezes que conseguir em 30 segundos! Cada clique conta como um beijo. Seja rápido e divirta-se!</p>
+        </div>
+        
+        <div class="game-status waiting" id="gameStatus">
+            Pronto para começar? Clique em "Iniciar Jogo"!
+        </div>
+        
+        <div class="timer-display" id="timerDisplay">30</div>
+        <div class="counter-display" id="counterDisplay">0</div>
+        
+        <button class="kiss-button start-button" id="startButton" onclick="startGame()">
+            🎮 Iniciar Jogo
+        </button>
+        
+        <button class="kiss-button" id="kissButton" onclick="addKiss()" disabled>
+            💋 BEIJAR 💋
+        </button>
+        
+        <button class="kiss-button restart-button" id="restartButton" onclick="restartGame()" style="display: none;">
+            🔄 Jogar Novamente
+        </button>
+        
+        <div id="scoreMessage" style="display: none;"></div>
+    </div>
+
+    <script>
+        let gameState = 'waiting'; // waiting, playing, finished
+        let timeLeft = 30;
+        let kissCount = 0;
+        let gameTimer = null;
+        let kissSound = null;
+
+        // Elementos do DOM
+        const timerDisplay = document.getElementById('timerDisplay');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const gameStatus = document.getElementById('gameStatus');
+        const startButton = document.getElementById('startButton');
+        const kissButton = document.getElementById('kissButton');
+        const restartButton = document.getElementById('restartButton');
+        const scoreMessage = document.getElementById('scoreMessage');
+
+        function startGame() {
+            gameState = 'playing';
+            timeLeft = 30;
+            kissCount = 0;
+            
+            updateDisplay();
+            updateGameStatus();
+            
+            startButton.style.display = 'none';
+            kissButton.disabled = false;
+            restartButton.style.display = 'none';
+            scoreMessage.style.display = 'none';
+            
+            // Iniciar timer
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function addKiss() {
+            if (gameState !== 'playing') return;
+            
+            kissCount++;
+            updateDisplay();
+            createKissEffect();
+            playKissSound();
+            
+            // Animação do contador
+            counterDisplay.classList.add('updated');
+            setTimeout(() => {
+                counterDisplay.classList.remove('updated');
+            }, 200);
+        }
+
+        function endGame() {
+            gameState = 'finished';
+            clearInterval(gameTimer);
+            
+            kissButton.disabled = true;
+            restartButton.style.display = 'block';
+            updateGameStatus();
+            showScoreMessage();
+        }
+
+        function restartGame() {
+            gameState = 'waiting';
+            timeLeft = 30;
+            kissCount = 0;
+            
+            updateDisplay();
+            updateGameStatus();
+            
+            startButton.style.display = 'block';
+            kissButton.disabled = true;
+            restartButton.style.display = 'none';
+            scoreMessage.style.display = 'none';
+        }
+
+        function updateDisplay() {
+            timerDisplay.textContent = timeLeft;
+            counterDisplay.textContent = kissCount;
+        }
+
+        function updateGameStatus() {
+            switch(gameState) {
+                case 'waiting':
+                    gameStatus.textContent = 'Pronto para começar? Clique em "Iniciar Jogo"!';
+                    gameStatus.className = 'game-status waiting';
+                    break;
+                case 'playing':
+                    gameStatus.textContent = `⏰ Tempo restante: ${timeLeft}s - Continue beijando!`;
+                    gameStatus.className = 'game-status playing';
+                    break;
+                case 'finished':
+                    gameStatus.textContent = '🎉 Tempo esgotado! Veja sua pontuação abaixo!';
+                    gameStatus.className = 'game-status finished';
+                    break;
+            }
+        }
+
+        function showScoreMessage() {
+            let message = '';
+            let emoji = '';
+            
+            if (kissCount >= 50) {
+                emoji = '🏆';
+                message = `INCRÍVEL! ${kissCount} beijos! Você é um(a) campeão(ã) dos beijos!`;
+            } else if (kissCount >= 30) {
+                emoji = '🥇';
+                message = `EXCELENTE! ${kissCount} beijos! Você tem muita energia!`;
+            } else if (kissCount >= 20) {
+                emoji = '🥈';
+                message = `MUITO BOM! ${kissCount} beijos! Você é bem carinhoso(a)!`;
+            } else if (kissCount >= 10) {
+                emoji = '🥉';
+                message = `BOM! ${kissCount} beijos! Continue praticando!`;
+            } else {
+                emoji = '💕';
+                message = `${kissCount} beijos! Todo beijo conta, mesmo os poucos!`;
+            }
+            
+            scoreMessage.innerHTML = `${emoji} ${message}`;
+            scoreMessage.style.display = 'block';
+        }
+
+        function createKissEffect() {
+            const effectsContainer = document.getElementById('kissEffects');
+            const effect = document.createElement('div');
+            effect.className = 'kiss-effect';
+            effect.innerHTML = '💋';
+            
+            // Posição aleatória na tela
+            effect.style.left = Math.random() * 80 + 10 + '%';
+            effect.style.top = Math.random() * 60 + 20 + '%';
+            
+            effectsContainer.appendChild(effect);
+            
+            // Remover após a animação
+            setTimeout(() => {
+                effect.remove();
+            }, 1000);
+        }
+
+        function playKissSound() {
+            // Criar som de beijo usando Web Audio API
+            if (!kissSound) {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                kissSound = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                kissSound.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                kissSound.frequency.setValueAtTime(800, audioContext.currentTime);
+                kissSound.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                kissSound.start(audioContext.currentTime);
+                kissSound.stop(audioContext.currentTime + 0.1);
+            }
+        }
+
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartSymbols = ['💕', '💖', '💗', '💘', '💝', '💞', '💟', '❤️'];
+            
+            // Criar corações pequenos
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 800);
+
+            // Criar corações médios
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart medium';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 6) + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 9000);
+            }, 1200);
+
+            // Criar corações grandes
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart large';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 7) + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }, 1500);
+        }
+
+        function goToGames() {
+            window.location.href = 'games.html';
+        }
+
+        // Inicializar
+        createHearts();
+        updateDisplay();
+        updateGameStatus();
+
+        // Permitir beijar com a tecla espaço
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && gameState === 'playing') {
+                e.preventDefault();
+                addKiss();
+            }
+        });
+    </script>
+</body>
+</html>
