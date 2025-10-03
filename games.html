@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossos Jogos - Momentos Especiais</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffb3c6, #ffc0cb);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 20, 147, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 182, 193, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+        }
+
+        .heart.large {
+            font-size: 40px;
+            animation: floatLarge 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255, 20, 147, 0.8));
+        }
+
+        .heart.medium {
+            font-size: 30px;
+            animation: floatMedium 7s ease-in-out infinite;
+            filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.7));
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatLarge {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.2);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatMedium {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            25% {
+                transform: translateY(75vh) rotate(90deg) translateX(20px);
+            }
+            75% {
+                transform: translateY(25vh) rotate(270deg) translateX(-20px);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg) translateX(0px);
+                opacity: 0;
+            }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff1493 !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 20px !important;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 105, 135, 0.3);
+            transition: all 0.3s ease;
+            z-index: 30;
+            color: white !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            min-width: 50px !important;
+            min-height: 50px !important;
+            max-width: 50px !important;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            background: #ff69b4 !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(255, 105, 135, 0.4);
+        }
+
+        .games-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 20px 20px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .games-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .games-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(255, 20, 147, 0.3);
+        }
+
+        .games-header p {
+            font-size: clamp(16px, 4vw, 20px);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 105, 135, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(255, 105, 135, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .game-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #ff1493;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .game-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        .play-btn:hover {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 10px;
+            }
+            
+            .game-card {
+                padding: 25px;
+            }
+            
+            .games-section {
+                padding: 70px 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <button class="back-btn" onclick="goToMemories()">←</button>
+    
+    <div class="games-section">
+        <div class="games-header">
+            <h1>🎮 Nossos Jogos</h1>
+            <p>Divirta-se com jogos especiais criados para nós</p>
+        </div>
+        
+        <div class="games-grid">
+            <div class="game-card" onclick="window.open('do_you_love_me.html', '_self')">
+                <div class="game-icon">💕</div>
+                <h3>Do You Love Me?</h3>
+                <p>Um jogo fofo para testar o nosso amor. Responda perguntas românticas e descubra o quanto nos conhecemos!</p>
+                <button class="play-btn">Jogar Agora</button>
+            </div>
+            
+            <div class="game-card" onclick="openGame('memory-match.html')">
+                <div class="game-icon">🧠</div>
+                <h3>Memory Match</h3>
+                <p>Encontre os pares das nossas fotos favoritas. Um jogo de memória com nossas melhores lembranças!</p>
+                <button class="play-btn">Jogar Agora</button>
+            </div>
+            
+            <div class="game-card" onclick="openGame('love-quiz.html')">
+                <div class="game-icon">❓</div>
+                <h3>Love Quiz</h3>
+                <p>Teste seus conhecimentos sobre nós! Perguntas sobre nossa história, gostos e momentos especiais.</p>
+                <button class="play-btn">Jogar Agora</button>
+            </div>
+            
+            <div class="game-card" onclick="openGame('heart-catcher.html')">
+                <div class="game-icon">💖</div>
+                <h3>Heart Catcher</h3>
+                <p>Colete corações no ar! Um jogo divertido onde você precisa pegar o máximo de corações possível.</p>
+                <button class="play-btn">Jogar Agora</button>
+            </div>
+            
+            <div class="game-card" onclick="openGame('love-story.html')">
+                <div class="game-icon">📖</div>
+                <h3>Love Story</h3>
+                <p>Complete nossa história de amor! Um jogo de escolhas onde você pode recriar nossos momentos.</p>
+                <button class="play-btn">Jogar Agora</button>
+            </div>
+            
+            <div class="game-card" onclick="openGame('kiss-counter.html')">
+                <div class="game-icon">💋</div>
+                <h3>Kiss Counter</h3>
+                <p>Conte quantos beijos você pode dar em 30 segundos! Um jogo rápido e divertido.</p>
+                <button class="play-btn">Jogar Agora</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openGame(gameFile) {
+            window.location.href = gameFile;
+        }
+
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            
+            // Criar corações pequenos
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 800);
+
+            // Criar corações médios
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart medium';
+                heart.innerHTML = '💕';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 6) + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 9000);
+            }, 1200);
+
+            // Criar corações grandes
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart large';
+                heart.innerHTML = '💗';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 7) + 's';
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }, 1500);
+        }
+
+        // Iniciar animação de corações
+        createHearts();
+
+        function goToMemories() {
+            // Vai para a página inicial
+            window.location.href = 'index.html';
+            
+            // Quando a página carregar, mostra a seção de memórias
+            window.addEventListener('beforeunload', function() {
+                sessionStorage.setItem('showMemories', 'true');
+            });
+        }
+    </script>
+</body>
+</html>

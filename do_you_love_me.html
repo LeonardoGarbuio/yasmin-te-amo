@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="do_you_love_me.css" />
+    <title>Você me ama? - Nossos Jogos</title>
+    <style>
+      .back-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: #ff1493 !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 20px !important;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(255, 105, 135, 0.3);
+        transition: all 0.3s ease;
+        z-index: 30;
+        color: white !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0 !important;
+        min-width: 50px !important;
+        min-height: 50px !important;
+        max-width: 50px !important;
+      }
+
+      .back-btn:hover {
+        transform: scale(1.1);
+        background: #ff69b4 !important;
+        color: white !important;
+        box-shadow: 0 8px 20px rgba(255, 105, 135, 0.4);
+      }
+
+      body {
+        background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffb3c6, #ffc0cb) !important;
+        background-size: 400% 400% !important;
+        animation: gradientShift 8s ease infinite !important;
+      }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .question {
+        color: white !important;
+        text-shadow: 0 4px 20px rgba(255, 20, 147, 0.3) !important;
+      }
+
+      .result-container h2 {
+        color: white !important;
+        text-shadow: 0 4px 20px rgba(255, 20, 147, 0.3) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- for more code, visit my tiktok account -->
+    <!-- tiktok "meowish" -->
+
+    <button class="back-btn" onclick="goToMemories()">←</button>
+
+    <div class="question-container container">
+      <div
+        class="tenor-gif-embed"
+        data-postid="25789758"
+        data-share-method="host"
+        data-width="100%">
+        <a href="https://tenor.com/view/tkthao219-bubududu-gif-25789758"
+          >Tkthao219 Bubududu Sticker</a
+        >from
+        <a href="https://tenor.com/search/tkthao219-stickers"
+          >Tkthao219 Stickers</a
+        >
+      </div>
+      <script
+        type="text/javascript"
+        async
+        src="https://tenor.com/embed.js"></script>
+
+      <h2 class="question">Você me ama?</h2>
+      <div class="button-container">
+        <button class="yes-btn btn js-yes-btn">Sim</button>
+        <button class="no-btn btn js-no-btn">Não</button>
+      </div>
+    </div>
+    <div class="result-container container">
+      <video class="gif-result" src="cute love gif.mp4" autoplay loop></video>
+      <h2>Eu sabia! 😍</h2>
+    </div>
+
+    <div class="cssload-main">
+      <div class="cssload-heart">
+        <span class="cssload-heartL"></span>
+        <span class="cssload-heartR"></span>
+        <span class="cssload-square"></span>
+      </div>
+      <div class="cssload-shadow"></div>
+    </div>
+    <script src="do_you_love_me.js"></script>
+    <script>
+        function goToMemories() {
+            // Vai para a página inicial
+            window.location.href = 'index.html';
+            
+            // Quando a página carregar, mostra a seção de memórias
+            window.addEventListener('beforeunload', function() {
+                sessionStorage.setItem('showMemories', 'true');
+            });
+        }
+    </script>
+  </body>
+</html>

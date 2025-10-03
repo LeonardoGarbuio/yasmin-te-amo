@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>para você</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffb3c6, #ffc0cb);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 20, 147, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255, 182, 193, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+        }
+
+        .heart.large {
+            font-size: 35px;
+            animation: floatLarge 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 12px rgba(255, 105, 180, 0.8));
+        }
+
+        .heart.medium {
+            font-size: 28px;
+            animation: floatMedium 7s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.7));
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(0.8); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 1; 
+                transform: translateY(-10px) rotate(5deg) scale(1);
+            }
+            90% { 
+                opacity: 1; 
+                transform: translateY(-90vh) rotate(355deg) scale(0.8);
+            }
+            100% { 
+                transform: translateY(-100vh) rotate(360deg) scale(0.5); 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes floatLarge {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(0.9) translateX(0px); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 1; 
+                transform: translateY(-15px) rotate(8deg) scale(1.1) translateX(10px);
+            }
+            30% { 
+                transform: translateY(-30vh) rotate(15deg) scale(1.2) translateX(-15px);
+            }
+            60% { 
+                transform: translateY(-60vh) rotate(-10deg) scale(1.1) translateX(20px);
+            }
+            90% { 
+                opacity: 1; 
+                transform: translateY(-90vh) rotate(-5deg) scale(0.9) translateX(-10px);
+            }
+            100% { 
+                transform: translateY(-100vh) rotate(0deg) scale(0.6) translateX(0px); 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes floatMedium {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(0.8) translateX(0px); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 1; 
+                transform: translateY(-12px) rotate(6deg) scale(1) translateX(-8px);
+            }
+            40% { 
+                transform: translateY(-40vh) rotate(-8deg) scale(1.1) translateX(12px);
+            }
+            70% { 
+                transform: translateY(-70vh) rotate(12deg) scale(1) translateX(-18px);
+            }
+            90% { 
+                opacity: 1; 
+                transform: translateY(-90vh) rotate(3deg) scale(0.8) translateX(5px);
+            }
+            100% { 
+                transform: translateY(-100vh) rotate(0deg) scale(0.5) translateX(0px); 
+                opacity: 0; 
+            }
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 
+                0 20px 60px rgba(255, 105, 135, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.6), transparent);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 25px 70px rgba(255, 105, 135, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        h1 {
+            font-size: clamp(2em, 8vw, 3em);
+            color: #2d2d2d;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(255, 105, 180, 0.1);
+            position: relative;
+        }
+
+        h1::after {
+            content: '💕';
+            position: absolute;
+            right: -30px;
+            top: 0;
+            font-size: 0.6em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 45px;
+            font-size: clamp(14px, 4vw, 16px);
+            font-weight: 400;
+        }
+
+        button {
+            position: relative;
+            background: linear-gradient(135deg, #ff1493, #ff69b4, #ffb6c1);
+            background-size: 200% 200%;
+            border: none;
+            padding: 24px 60px;
+            font-size: clamp(16px, 4vw, 18px);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 
+                0 15px 40px rgba(255, 20, 147, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 280px;
+            overflow: hidden;
+            animation: gradientShift 3s ease infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:active {
+            transform: scale(0.96);
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.5);
+        }
+
+
+        .memories-section {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab, #ffb3c6, #ffc0cb);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            z-index: 20;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .memories-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff1493 !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 20px !important;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 105, 135, 0.3);
+            transition: all 0.3s ease;
+            z-index: 30;
+            color: white !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            min-width: 50px !important;
+            min-height: 50px !important;
+            max-width: 50px !important;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            background: #ff69b4 !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(255, 105, 135, 0.4);
+        }
+
+        .memory-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(255, 105, 135, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease;
+            transition: all 0.3s ease;
+        }
+
+        .memory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 105, 135, 0.3);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .memory-card h3 {
+            color: #ff1493;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .memory-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #ffb3c6, #ff8fab);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-placeholder:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(255, 20, 147, 0.3);
+        }
+
+        .photo-placeholder::before {
+            content: '📸';
+            font-size: 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .photo-placeholder::after {
+            content: 'Clique para ver mais';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-placeholder:hover::after {
+            opacity: 1;
+        }
+
+        /* Modal do Carrossel */
+        .carousel-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .carousel-container {
+            width: 95%;
+            max-width: 800px;
+            height: 90%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-container {
+                width: 98%;
+                height: 95%;
+                margin: 10px;
+            }
+        }
+
+        .carousel-header {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-header {
+                padding: 15px;
+                min-height: 70px;
+            }
+            
+            .carousel-header h2 {
+                font-size: 1.2em;
+                margin: 0;
+                padding: 0 60px;
+            }
+        }
+
+        .carousel-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff1493 !important;
+            border: none !important;
+            color: white !important;
+            width: 45px !important;
+            height: 45px !important;
+            border-radius: 50% !important;
+            cursor: pointer;
+            font-size: 20px !important;
+            font-weight: 300;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            min-width: 45px !important;
+            min-height: 45px !important;
+            padding: 0 !important;
+            max-width: 45px !important;
+        }
+
+        .carousel-close:hover {
+            background: #ff69b4;
+            transform: scale(1.05) rotate(90deg);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-close {
+                top: 12px;
+                right: 12px;
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 18px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                max-width: 40px !important;
+            }
+        }
+
+        .carousel-content {
+            height: calc(100% - 80px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-content {
+                height: calc(100% - 70px);
+            }
+        }
+
+        .carousel-slide {
+            display: none;
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-slide {
+                padding: 15px;
+            }
+        }
+
+        .carousel-slide.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .carousel-media {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #ffb3c6, #ff8fab);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-media {
+                height: 200px;
+                margin-bottom: 15px;
+            }
+        }
+
+        .carousel-media img, .carousel-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .carousel-media img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+
+        .carousel-media.placeholder::before {
+            content: '🎥';
+            font-size: 60px;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .carousel-story {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff1493;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-story {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .carousel-story h3 {
+                font-size: 1.1em;
+                margin-bottom: 8px;
+            }
+            
+            .carousel-story p {
+                font-size: 14px;
+                line-height: 1.5;
+                margin-bottom: 10px;
+            }
+            
+            .carousel-story .date {
+                font-size: 12px;
+            }
+        }
+
+        .carousel-story h3 {
+            color: #ff1493;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .carousel-story p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .carousel-story .date {
+            color: #999;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .carousel-navigation {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-navigation {
+                bottom: 15px;
+                gap: 8px;
+            }
+        }
+
+        .carousel-nav-btn {
+            width: 18px !important;
+            height: 18px !important;
+            border-radius: 50% !important;
+            background: rgba(255, 20, 147, 0.3) !important;
+            border: 2px solid rgba(255, 20, 147, 0.2) !important;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 18px !important;
+            min-height: 18px !important;
+            padding: 0 !important;
+            max-width: 18px !important;
+        }
+
+        .carousel-nav-btn.active {
+            background: #ff1493;
+            border-color: #ff1493;
+            transform: scale(1.5);
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.5);
+        }
+
+        .carousel-nav-btn:hover {
+            background: rgba(255, 20, 147, 0.6);
+            transform: scale(1.3);
+        }
+
+        .carousel-arrows {
+            position: absolute;
+            top: 20%;
+            transform: translateY(-50%);
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 28px !important;
+            background: linear-gradient(135deg, #ff69b4, #ff1493) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 50% !important;
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            min-width: 60px !important;
+            min-height: 60px !important;
+            padding: 0 !important;
+            max-width: 60px !important;
+        }
+
+        .carousel-arrows:hover {
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 12px 35px rgba(255, 20, 147, 0.5);
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+        }
+
+        .carousel-arrows:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .carousel-arrows.prev {
+            left: 20px;
+        }
+
+        .carousel-arrows.next {
+            right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-arrows {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 24px !important;
+                min-width: 50px !important;
+                min-height: 50px !important;
+                max-width: 50px !important;
+                top: 15% !important;
+            }
+            
+            .carousel-arrows.prev {
+                left: 15px;
+            }
+            
+            .carousel-arrows.next {
+                right: 15px;
+            }
+        }
+
+        .carousel-counter {
+            position: absolute;
+            top: 15px;
+            right: 70px;
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            width: 45px !important;
+            height: 45px !important;
+            border-radius: 50% !important;
+            font-size: 12px !important;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            min-width: 45px !important;
+            min-height: 45px !important;
+            padding: 0 !important;
+            max-width: 45px !important;
+        }
+
+        .carousel-counter:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-counter {
+                top: 12px;
+                right: 60px;
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 11px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                max-width: 40px !important;
+            }
+        }
+
+        .love-message {
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .games-card {
+            background: linear-gradient(45deg, #ff69b4, #ff8fab);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3); }
+            to { box-shadow: 0 15px 40px rgba(255, 20, 147, 0.5); }
+        }
+
+        .love-message h2 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .games-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .games-card p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .games-card .games-btn {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 12px 25px !important;
+            border-radius: 25px !important;
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .games-simple {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+        }
+
+        .gamepad-icon {
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gamepad-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
+        }
+
+        .love-message p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .memory-grid {
+            display: grid;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+
+        @media (min-width: 768px) {
+            button:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 20px 50px rgba(255, 20, 147, 0.5);
+            }
+            
+            .memory-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container" id="mainContainer">
+        <h1>Nossos Momentos</h1>
+        <p class="subtitle">Uma coleção de memórias especiais</p>
+        <button onclick="showMemories()">Ver Memórias</button>
+    </div>
+
+    <div class="memories-section" id="memoriesSection">
+        <button class="back-btn" onclick="hideMemories()">←</button>
+        
+        <div class="memory-grid">
+            <div class="games-simple">
+                <div class="gamepad-icon" onclick="window.location.href='games.html'">
+                    🎮
+                </div>
+            </div>
+
+            <div class="love-message">
+                <h2>💕 Para Minha Amada 💕</h2>
+                <p>Cada momento ao seu lado é especial. Este site é uma pequena demonstração do quanto você significa para mim. Te amo mais que as palavras podem expressar.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🎉 Nosso Primeiro Encontro</h3>
+                <div class="photo-placeholder" onclick="openCarousel('primeiro-encontro')"></div>
+                <p>Lembro como se fosse ontem... Aquele momento mágico quando nossos olhos se encontraram pela primeira vez. Meu coração sabia que algo especial estava começando.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🌅 Momentos de Paz</h3>
+                <div class="photo-placeholder" onclick="openCarousel('momentos-paz')"></div>
+                <p>Os melhores momentos são aqueles simples ao seu lado. Um café da manhã, uma caminhada, ou apenas ficar deitados conversando. Você torna tudo especial.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🎂 Celebrações Juntos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('celebracaoes')"></div>
+                <p>Cada aniversário, cada conquista, cada pequena vitória... Celebrar ao seu lado é sempre mais doce. Você é minha maior celebração.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🌙 Noites Especiais</h3>
+                <div class="photo-placeholder" onclick="openCarousel('noites-especiais')"></div>
+                <p>As noites ao seu lado são as mais lindas. Seja assistindo um filme, olhando as estrelas ou apenas rindo de bobagens. Você ilumina minha vida.</p>
+            </div>
+
+            <div class="love-message">
+                <h2>💝 Promessas</h2>
+                <p>Prometo continuar criando memórias lindas com você. Prometo te amar todos os dias. Prometo ser seu porto seguro e sua maior aventura. Para sempre, meu amor.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🌈 Nossos Sonhos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('nossos-sonhos')"></div>
+                <p>Juntos sonhamos, juntos planejamos, juntos construímos nosso futuro. Cada sonho é mais bonito quando compartilhado com você.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>💌 Mensagens de Amor</h3>
+                <div class="photo-placeholder" onclick="openCarousel('mensagens-amor')"></div>
+                <p>Você é minha inspiração, minha força, minha razão de sorrir todos os dias. Obrigado por ser exatamente quem você é.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>✈️ Nossas Viagens</h3>
+                <div class="photo-placeholder" onclick="openCarousel('nossas-viagens')"></div>
+                <p>Explorando o mundo juntos, descobrindo novos lugares, criando aventuras inesquecíveis. Cada destino é mais especial ao seu lado.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🍽️ Jantares Românticos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('jantares-romanticos')"></div>
+                <p>Momentos especiais à mesa, compartilhando refeições deliciosas e conversas profundas. Você torna cada jantar uma experiência única.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>📸 Selfies Juntos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('selfies-juntos')"></div>
+                <p>Capturando nossa felicidade em cada foto. Esses momentos espontâneos são os mais autênticos e especiais.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>☕ Momentos Casuais</h3>
+                <div class="photo-placeholder" onclick="openCarousel('momentos-casuais')"></div>
+                <p>A vida cotidiana ao seu lado é extraordinária. Cada momento simples se torna especial quando você está presente.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🎁 Surpresas Especiais</h3>
+                <div class="photo-placeholder" onclick="openCarousel('surpresas-especiais')"></div>
+                <p>Gestos de amor inesquecíveis, surpresas que fazem o coração bater mais forte. Você merece toda a magia do mundo.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🎉 Festas e Eventos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('festas-e-eventos')"></div>
+                <p>Celebrando a vida juntos, dançando, rindo, criando memórias em cada festa. Você é minha parceira perfeita para qualquer celebração.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🌿 Natureza e Passeios</h3>
+                <div class="photo-placeholder" onclick="openCarousel('natureza-e-passeios')"></div>
+                <p>Conectando com o mundo natural, respirando ar puro, admirando a beleza ao nosso redor. A natureza fica mais linda ao seu lado.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🤗 Momentos Íntimos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('momentos-intimos')"></div>
+                <p>Carinho e ternura, abraços que curam, olhares que dizem tudo. Esses momentos de intimidade são os mais preciosos.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🏔️ Aventuras Juntas</h3>
+                <div class="photo-placeholder" onclick="openCarousel('aventuras-juntas')"></div>
+                <p>Desbravando novos horizontes, superando desafios, descobrindo que juntos somos invencíveis. Cada aventura é uma história de amor.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🎨 Momentos Criativos</h3>
+                <div class="photo-placeholder" onclick="openCarousel('momentos-criativos')"></div>
+                <p>Criando arte juntos, explorando nossa criatividade, transformando ideias em realidade. Você é minha musa inspiradora.</p>
+            </div>
+
+            <div class="memory-card">
+                <h3>🌅 Amanheceres e Entardeceres</h3>
+                <div class="photo-placeholder" onclick="openCarousel('amanheceres-entardeceres')"></div>
+                <p>Testemunhando a magia do nascer e pôr do sol ao seu lado. Cada raio de luz parece pintado especialmente para nós.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMemories() {
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('memoriesSection').classList.add('active');
+            createHearts();
+        }
+
+        function hideMemories() {
+            document.getElementById('memoriesSection').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('mainContainer').style.display = 'flex';
+            }, 300);
+        }
+
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartSymbols = ['💕', '💖', '💗', '💘', '💝', '💞', '💟', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤍', '🖤', '🤎'];
+            
+            // Criar corações pequenos (mais frequentes)
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 6000);
+            }, 600); // Mais frequente
+            
+            // Criar corações médios (frequência média)
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart medium';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 6) + 's';
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 1200);
+            
+            // Criar corações grandes (por toda a tela)
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart large';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                // Corações grandes por toda a largura da tela
+                heart.style.left = Math.random() * 100 + '%'; // 0% a 100%
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 7) + 's';
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 9000);
+            }, 1500); // Mais frequentes
+        }
+
+        // Criar alguns corações iniciais
+        createHearts();
+
+        // Verificar se deve mostrar as memórias quando voltar dos jogos
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('showMemories') === 'true') {
+                sessionStorage.removeItem('showMemories');
+                showMemories();
+            }
+        });
+
+        // Array com todas as imagens
+        const allImages = [
+            'images/WhatsApp Image 2025-10-02 at 22.48.58.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.48.58 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.48.59.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.48.59 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.48.59 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.48.59 (3).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.48.59.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.00 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.00 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.00.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.01 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.01 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.01 (3).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.01.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.02 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.02 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.02 (3).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.02.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.03 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.03 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.03.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.04 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.04 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.04.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.05 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.05 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.05.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.06 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.06 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.06.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.07 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.07 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.07.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.08 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.08 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.08.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.09 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.09 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.09.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.10 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.10 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.10 (3).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.10 (4).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.10 (5).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.10.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.11 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.11 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.11 (3).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.11 (4).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.11.jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.12 (1).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.12 (2).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.12 (3).jpeg',
+            'images/WhatsApp Image 2025-10-02 at 22.49.12.jpeg'
+        ];
+
+        // Função para criar slides com imagens diferentes
+        function createSlidesWithImages(startIndex, stories) {
+            return stories.map((story, index) => ({
+                media: allImages[(startIndex + index) % allImages.length],
+                story: story
+            }));
+        }
+
+        // Função para atualizar todas as imagens aleatórias
+        function updateAllRandomImages() {
+            let imageIndex = 6; // Começar do índice 6
+            document.querySelectorAll('[data-media]').forEach(element => {
+                if (element.dataset.media && element.dataset.media.includes('Math.floor(Math.random()')) {
+                    element.dataset.media = `allImages[${imageIndex % allImages.length}]`;
+                    imageIndex++;
+                }
+            });
+        }
+
+        // Dados dos carrosséis
+        const carouselData = {
+            'primeiro-encontro': {
+                title: '🎉 Nosso Primeiro Encontro',
+                slides: [
+                    {
+                        media: allImages[0],
+                        story: {
+                            title: 'O Momento Mágico',
+                            content: 'Lembro como se fosse ontem... Aquele momento mágico quando nossos olhos se encontraram pela primeira vez. O tempo parou, o mundo ao redor desapareceu, e só existíamos nós dois. Meu coração sabia que algo especial estava começando.',
+                            date: '15 de Março, 2023'
+                        }
+                    },
+                    {
+                        media: allImages[1],
+                        story: {
+                            title: 'A Primeira Conversa',
+                            content: 'Nossa primeira conversa durou horas, mas pareceram minutos. Descobri que você é a pessoa mais interessante que já conheci. Cada palavra sua me encantava mais.',
+                            date: '15 de Março, 2023'
+                        }
+                    },
+                    {
+                        media: allImages[2],
+                        story: {
+                            title: 'O Primeiro Sorriso',
+                            content: 'Seu sorriso iluminou meu mundo naquele dia. Desde então, ele se tornou minha fonte de felicidade. Cada vez que você sorri, meu coração se enche de amor.',
+                            date: '15 de Março, 2023'
+                        }
+                    }
+                ]
+            },
+            'momentos-paz': {
+                title: '🌅 Momentos de Paz',
+                slides: [
+                    {
+                        media: allImages[3],
+                        story: {
+                            title: 'Café da Manhã Especial',
+                            content: 'Os melhores momentos são aqueles simples ao seu lado. Um café da manhã compartilhado, conversas sobre sonhos, planos para o futuro. Você torna cada manhã especial.',
+                            date: 'Vários dias especiais'
+                        }
+                    },
+                    {
+                        media: allImages[4],
+                        story: {
+                            title: 'Caminhadas Românticas',
+                            content: 'Nossas caminhadas são momentos de paz e conexão. Caminhamos de mãos dadas, observamos o pôr do sol, compartilhamos segredos e sonhos.',
+                            date: 'Momentos únicos'
+                        }
+                    }
+                ]
+            },
+            'celebracaoes': {
+                title: '🎂 Celebrações Juntos',
+                slides: [
+                    {
+                        media: allImages[5],
+                        story: {
+                            title: 'Seu Aniversário',
+                            content: 'Celebrar você é a melhor coisa do mundo. Ver seus olhos brilharem de felicidade, ouvir sua risada contagiante. Você merece toda a alegria do universo.',
+                            date: 'Seu dia especial'
+                        }
+                    },
+                    {
+                        media: allImages[6],
+                        story: {
+                            title: 'Nossas Conquistas',
+                            content: 'Cada conquista sua é uma conquista minha também. Celebramos juntos, apoiamos um ao outro, crescemos juntos. Você é minha maior celebração.',
+                            date: 'Todos os dias'
+                        }
+                    }
+                ]
+            },
+            'noites-especiais': {
+                title: '🌙 Noites Especiais',
+                slides: [
+                    {
+                        media: allImages[9],
+                        story: {
+                            title: 'Noites de Filme',
+                            content: 'As noites ao seu lado são as mais lindas. Assistir filmes, rir das cenas engraçadas, comentar sobre a história. Você torna cada noite especial.',
+                            date: 'Noites inesquecíveis'
+                        }
+                    },
+                    {
+                        media: allImages[11],
+                        story: {
+                            title: 'Olhando as Estrelas',
+                            content: 'Deitados olhando as estrelas, contando histórias, planejando o futuro. Esses momentos de intimidade são os mais preciosos para mim.',
+                            date: 'Noites mágicas'
+                        }
+                    }
+                ]
+            },
+            'nossos-sonhos': {
+                title: '🌈 Nossos Sonhos',
+                slides: [
+                    {
+                        media: allImages[13],
+                        story: {
+                            title: 'Sonhos Compartilhados',
+                            content: 'Juntos sonhamos, juntos planejamos, juntos construímos nosso futuro. Cada sonho é mais bonito quando compartilhado com você. Nossos sonhos se entrelaçam e se tornam realidade.',
+                            date: 'Todos os dias'
+                        }
+                    }
+                ]
+            },
+            'mensagens-amor': {
+                title: '💌 Mensagens de Amor',
+                slides: [
+                    {
+                        media: allImages[14],
+                        story: {
+                            title: 'Minha Inspiração',
+                            content: 'Você é minha inspiração, minha força, minha razão de sorrir todos os dias. Obrigado por ser exatamente quem você é. Te amo mais que as palavras podem expressar.',
+                            date: 'Para sempre'
+                        }
+                    }
+                ]
+            },
+            'nossas-viagens': {
+                title: '✈️ Nossas Viagens',
+                slides: [
+                    {
+                        media: allImages[15],
+                        story: {
+                            title: 'Primeira Viagem',
+                            content: 'Nossa primeira viagem juntos foi mágica. Descobrir novos lugares ao seu lado é a melhor aventura que posso viver.',
+                            date: 'Viagem inesquecível'
+                        }
+                    },
+                    {
+                        media: allImages[16],
+                        story: {
+                            title: 'Destinos dos Sonhos',
+                            content: 'Cada destino se torna especial quando você está ao meu lado. Juntos transformamos qualquer lugar em paraíso.',
+                            date: 'Aventuras contínuas'
+                        }
+                    },
+                    {
+                        media: allImages[17],
+                        story: {
+                            title: 'Memórias de Estrada',
+                            content: 'As melhores histórias são escritas nas estradas que percorremos juntos. Cada quilômetro é uma nova descoberta.',
+                            date: 'Caminhos do amor'
+                        }
+                    }
+                ]
+            },
+            'jantares-romanticos': {
+                title: '🍽️ Jantares Românticos',
+                slides: [
+                    {
+                        media: allImages[18],
+                        story: {
+                            title: 'Primeiro Jantar',
+                            content: 'Nosso primeiro jantar romântico foi perfeito. A comida ficou em segundo plano quando você estava na mesa.',
+                            date: 'Noite especial'
+                        }
+                    },
+                    {
+                        media: allImages[19],
+                        story: {
+                            title: 'Jantares Especiais',
+                            content: 'Cada refeição ao seu lado é uma celebração. Compartilhar pratos e conversas é nossa tradição mais linda.',
+                            date: 'Momentos doces'
+                        }
+                    },
+                    {
+                        media: allImages[20],
+                        story: {
+                            title: 'Cozinhando Juntos',
+                            content: 'Cozinhar ao seu lado é uma arte. Transformamos ingredientes simples em momentos mágicos na cozinha.',
+                            date: 'Receitas de amor'
+                        }
+                    }
+                ]
+            },
+            'selfies-juntos': {
+                title: '📸 Selfies Juntos',
+                slides: [
+                    {
+                        media: allImages[21],
+                        story: {
+                            title: 'Primeira Selfie',
+                            content: 'Nossa primeira selfie juntos! Desde então, capturamos nossa felicidade em cada foto espontânea.',
+                            date: 'Momento capturado'
+                        }
+                    },
+                    {
+                        media: allImages[22],
+                        story: {
+                            title: 'Sorrisos Contagiantes',
+                            content: 'Seus sorrisos são contagiantes em cada foto. Você ilumina qualquer momento, qualquer lugar.',
+                            date: 'Alegria eterna'
+                        }
+                    },
+                    {
+                        media: allImages[23],
+                        story: {
+                            title: 'Momentos Espontâneos',
+                            content: 'As melhores fotos são aquelas tiradas sem pose. Nossa naturalidade é nossa maior beleza.',
+                            date: 'Autenticidade pura'
+                        }
+                    }
+                ]
+            },
+            'momentos-casuais': {
+                title: '☕ Momentos Casuais',
+                slides: [
+                    {
+                        media: allImages[24],
+                        story: {
+                            title: 'Café da Manhã',
+                            content: 'Café da manhã ao seu lado é o melhor começo de dia possível. Cada manhã é uma nova oportunidade de te amar.',
+                            date: 'Manhãs especiais'
+                        }
+                    },
+                    {
+                        media: allImages[25],
+                        story: {
+                            title: 'Tarde Tranquila',
+                            content: 'As tardes mais simples ao seu lado são as mais especiais. Conversas despretensiosas, risadas espontâneas.',
+                            date: 'Tardes de paz'
+                        }
+                    },
+                    {
+                        media: allImages[26],
+                        story: {
+                            title: 'Vida Cotidiana',
+                            content: 'A vida cotidiana ao seu lado é extraordinária. Você transforma o comum em especial todos os dias.',
+                            date: 'Cotidiano mágico'
+                        }
+                    }
+                ]
+            },
+            'surpresas-especiais': {
+                title: '🎁 Surpresas Especiais',
+                slides: [
+                    {
+                        media: allImages[27],
+                        story: {
+                            title: 'Primeira Surpresa',
+                            content: 'Ver sua reação à primeira surpresa que preparei foi mágico. Seus olhos brilhando de felicidade são minha recompensa.',
+                            date: 'Surpresa inesquecível'
+                        }
+                    },
+                    {
+                        media: allImages[28],
+                        story: {
+                            title: 'Gestos de Amor',
+                            content: 'Cada gesto de amor é uma pequena surpresa que preparo para você. Você merece toda a magia do mundo.',
+                            date: 'Amor em ação'
+                        }
+                    },
+                    {
+                        media: allImages[29],
+                        story: {
+                            title: 'Momentos Inesperados',
+                            content: 'Os melhores momentos são os inesperados. Surpreender você é uma das minhas maiores alegrias.',
+                            date: 'Surpresas contínuas'
+                        }
+                    }
+                ]
+            },
+            'festas-e-eventos': {
+                title: '🎉 Festas e Eventos',
+                slides: [
+                    {
+                        media: allImages[30],
+                        story: {
+                            title: 'Primeira Festa',
+                            content: 'Nossa primeira festa juntos foi incrível! Dançar, rir e celebrar ao seu lado é a melhor sensação do mundo.',
+                            date: 'Festa inesquecível'
+                        }
+                    },
+                    {
+                        media: allImages[31],
+                        story: {
+                            title: 'Celebrações Especiais',
+                            content: 'Cada evento se torna especial quando você está presente. Você é minha parceira perfeita para qualquer celebração.',
+                            date: 'Celebrações juntos'
+                        }
+                    },
+                    {
+                        media: allImages[32],
+                        story: {
+                            title: 'Momentos de Alegria',
+                            content: 'Rir ao seu lado é a melhor terapia. Cada festa, cada evento, cada momento de alegria é melhor com você.',
+                            date: 'Alegria compartilhada'
+                        }
+                    }
+                ]
+            },
+            'natureza-e-passeios': {
+                title: '🌿 Natureza e Passeios',
+                slides: [
+                    {
+                        media: allImages[33],
+                        story: {
+                            title: 'Primeiro Passeio',
+                            content: 'Nosso primeiro passeio na natureza foi mágico. Respirar ar puro ao seu lado é revitalizante.',
+                            date: 'Natureza e amor'
+                        }
+                    },
+                    {
+                        media: allImages[34],
+                        story: {
+                            title: 'Caminhadas Especiais',
+                            content: 'Caminhar pela natureza ao seu lado é uma terapia. Cada trilha, cada paisagem fica mais linda com você.',
+                            date: 'Trilhas do coração'
+                        }
+                    },
+                    {
+                        media: allImages[35],
+                        story: {
+                            title: 'Conectando com a Natureza',
+                            content: 'A natureza fica mais bela quando compartilhada com você. Juntos descobrimos a beleza do mundo ao nosso redor.',
+                            date: 'Beleza natural'
+                        }
+                    }
+                ]
+            },
+            'momentos-intimos': {
+                title: '🤗 Momentos Íntimos',
+                slides: [
+                    {
+                        media: allImages[36],
+                        story: {
+                            title: 'Primeiro Abraço',
+                            content: 'Nosso primeiro abraço verdadeiro foi mágico. Sentir você tão perto de mim é o melhor lugar do mundo.',
+                            date: 'Abraço inesquecível'
+                        }
+                    },
+                    {
+                        media: allImages[37],
+                        story: {
+                            title: 'Carinho e Ternura',
+                            content: 'Cada carinho, cada toque, cada momento de ternura é precioso. Você é meu porto seguro.',
+                            date: 'Ternura eterna'
+                        }
+                    },
+                    {
+                        media: allImages[38],
+                        story: {
+                            title: 'Olhares que Dizem Tudo',
+                            content: 'Nossos olhares falam mais que palavras. Cada olhar é uma declaração de amor silenciosa.',
+                            date: 'Olhares de amor'
+                        }
+                    }
+                ]
+            },
+            'aventuras-juntas': {
+                title: '🏔️ Aventuras Juntas',
+                slides: [
+                    {
+                        media: allImages[39],
+                        story: {
+                            title: 'Primeira Aventura',
+                            content: 'Nossa primeira aventura juntos foi emocionante! Descobrimos que juntos somos invencíveis.',
+                            date: 'Aventura épica'
+                        }
+                    },
+                    {
+                        media: allImages[40],
+                        story: {
+                            title: 'Desafios Superados',
+                            content: 'Cada desafio superado juntos nos fortalece mais. Juntos podemos conquistar qualquer montanha.',
+                            date: 'Conquistas compartilhadas'
+                        }
+                    },
+                    {
+                        media: allImages[41],
+                        story: {
+                            title: 'Novos Horizontes',
+                            content: 'Desbravamos novos horizontes juntos. Cada aventura é uma nova história de amor que escrevemos.',
+                            date: 'Horizontes infinitos'
+                        }
+                    }
+                ]
+            },
+            'momentos-criativos': {
+                title: '🎨 Momentos Criativos',
+                slides: [
+                    {
+                        media: allImages[42],
+                        story: {
+                            title: 'Criatividade em Ação',
+                            content: 'Criar arte ao seu lado é inspirador. Você é minha musa, minha fonte de criatividade e inspiração.',
+                            date: 'Arte do amor'
+                        }
+                    },
+                    {
+                        media: allImages[43],
+                        story: {
+                            title: 'Projetos Juntos',
+                            content: 'Transformamos ideias em realidade juntos. Cada projeto criado ao seu lado é uma obra-prima.',
+                            date: 'Criação compartilhada'
+                        }
+                    },
+                    {
+                        media: allImages[44],
+                        story: {
+                            title: 'Inspiração Mútua',
+                            content: 'Nos inspiramos mutuamente. Sua criatividade acende a minha, e juntos criamos magia.',
+                            date: 'Inspiração eterna'
+                        }
+                    }
+                ]
+            },
+            'amanheceres-entardeceres': {
+                title: '🌅 Amanheceres e Entardeceres',
+                slides: [
+                    {
+                        media: allImages[45],
+                        story: {
+                            title: 'Primeiro Amanhecer',
+                            content: 'Ver o primeiro amanhecer ao seu lado foi mágico. Cada raio de sol parece pintado especialmente para nós.',
+                            date: 'Amanhecer de amor'
+                        }
+                    },
+                    {
+                        media: allImages[46],
+                        story: {
+                            title: 'Pôr do Sol Romântico',
+                            content: 'O pôr do sol fica mais lindo quando você está ao meu lado. Cada cor no céu me lembra do seu sorriso.',
+                            date: 'Entardecer especial'
+                        }
+                    },
+                    {
+                        media: allImages[47],
+                        story: {
+                            title: 'Luzes do Céu',
+                            content: 'Testemunhar as luzes do céu ao seu lado é poesia pura. A natureza nos presenteia com espetáculos únicos.',
+                            date: 'Espectáculo natural'
+                        }
+                    },
+                    {
+                        media: allImages[48],
+                        story: {
+                            title: 'Momentos Dourados',
+                            content: 'Os momentos dourados do dia são ainda mais especiais ao seu lado. Você ilumina qualquer hora do dia.',
+                            date: 'Horas douradas'
+                        }
+                    },
+                    {
+                        media: allImages[49],
+                        story: {
+                            title: 'Eternidade em um Momento',
+                            content: 'Cada amanhecer e entardecer ao seu lado é uma eternidade em um momento. O tempo para quando você está presente.',
+                            date: 'Eternidade presente'
+                        }
+                    }
+                ]
+            }
+        };
+
+        function openCarousel(memoryId) {
+            const data = carouselData[memoryId];
+            if (!data) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'carousel-modal active';
+            modal.innerHTML = `
+                <div class="carousel-container">
+                    <div class="carousel-header">
+                        <h2>${data.title}</h2>
+                        <button class="carousel-close" onclick="closeCarousel()">×</button>
+                        <div class="carousel-counter">
+                            <span id="current-slide">1</span> / <span id="total-slides">${data.slides.length}</span>
+                        </div>
+                    </div>
+                    <div class="carousel-content">
+                        ${data.slides.map((slide, index) => `
+                            <div class="carousel-slide ${index === 0 ? 'active' : ''}">
+                                <div class="carousel-media ${slide.media === 'placeholder' ? 'placeholder' : ''}">
+                                    ${slide.media !== 'placeholder' ? `<img src="${slide.media}" alt="Memória">` : ''}
+                                </div>
+                                <div class="carousel-story">
+                                    <h3>${slide.story.title}</h3>
+                                    <p>${slide.story.content}</p>
+                                    <div class="date">${slide.story.date}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="carousel-arrows prev" onclick="changeSlide(-1)">‹</button>
+                    <button class="carousel-arrows next" onclick="changeSlide(1)">›</button>
+                    <div class="carousel-navigation">
+                        ${data.slides.map((_, index) => `
+                            <button class="carousel-nav-btn ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></button>
+                        `).join('')}
+                    </div>
+    </div>
+            `;
+
+            document.body.appendChild(modal);
+            currentCarousel = { data, currentSlide: 0 };
+        }
+
+        function closeCarousel() {
+            const modal = document.querySelector('.carousel-modal');
+            if (modal) {
+                modal.remove();
+                currentCarousel = null;
+            }
+        }
+
+        function changeSlide(direction) {
+            if (!currentCarousel) return;
+            
+            const totalSlides = currentCarousel.data.slides.length;
+            currentCarousel.currentSlide = (currentCarousel.currentSlide + direction + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            if (!currentCarousel) return;
+            currentCarousel.currentSlide = index;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            if (!currentCarousel) return;
+
+            const slides = document.querySelectorAll('.carousel-slide');
+            const navBtns = document.querySelectorAll('.carousel-nav-btn');
+            const currentSlideEl = document.getElementById('current-slide');
+
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentCarousel.currentSlide);
+            });
+
+            navBtns.forEach((btn, index) => {
+                btn.classList.toggle('active', index === currentCarousel.currentSlide);
+            });
+
+            if (currentSlideEl) {
+                currentSlideEl.textContent = currentCarousel.currentSlide + 1;
+            }
+        }
+
+        let currentCarousel = null;
+
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('carousel-modal')) {
+                closeCarousel();
+            }
+        });
+
+        // Navegação com teclado
+        document.addEventListener('keydown', (e) => {
+            if (!currentCarousel) return;
+            
+            if (e.key === 'Escape') {
+                closeCarousel();
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeSlide(1);
+            }
+        });
+    </script>
+</body>
+</html>
